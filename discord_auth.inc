@@ -63,7 +63,7 @@ stock DiscordDogrulamaBaslat(playerid)
     "%s%04d", DISCORD_CODE_PREFIX, random(10000));
 
     printf("[Discord] %s için doğrulama kodu üretildi: %s",
-        ReturnNameEx(playerid), pDogrulamaKod[playerid]);
+        ReturnName(playerid), pDogrulamaKod[playerid]);
 
     new query[256];
     format(query, sizeof(query),
@@ -72,14 +72,14 @@ stock DiscordDogrulamaBaslat(playerid)
     );
     mysql_tquery(mysqlC, query);
 
-    BilgiMesajiGonder(playerid, "Oyun hesabınızın Discord ile bağdaştırılması gerekmektedir.");
+    SendClientMessage(playerid, -1,"Oyun hesabınızın Discord ile bağdaştırılması gerekmektedir.");
 
     new msg[128];
     format(msg, sizeof(msg),
         "Size özel doğrulama kodu: {E6D8A8}%s", pDogrulamaKod[playerid]);
-    BilgiMesajiGonder(playerid, msg);
+    SendClientMessage(playerid, -1, msg);
 
-    BilgiMesajiGonder(playerid,
+    SendClientMessage(playerid, -1,
         "Kodu {E6D8A8}#bot-kanal {FFFFFF}üzerinden gönderin.");
 
     DiscordDogrulamaOrtamiHazirla(playerid);
@@ -102,7 +102,7 @@ public DiscordDogrulamaTimer(playerid)
         ReturnName(playerid)
     );
 
-    printf("[Discord] %s doğrulama kontrolü yapılıyor", ReturnNameEx(playerid));
+    printf("[Discord] %s doğrulama kontrolü yapılıyor", ReturnName(playerid));
 
     mysql_tquery(mysqlC, query, "DiscordDogrulamaKontrol", "i", playerid);
     return 1;
@@ -123,7 +123,7 @@ public DiscordDogrulamaKontrol(playerid)
     if(strlen(PlayerData[playerid][pDiscordID]) == 18)
     {
         printf("[Discord] %s doğrulandı. DiscordID: %s",
-            ReturnNameEx(playerid), PlayerData[playerid][pDiscordID]);
+            ReturnName(playerid), PlayerData[playerid][pDiscordID]);
 
         DiscordDogrulamaBitir(playerid);
     }
@@ -140,11 +140,11 @@ stock DiscordDogrulamaBitir(playerid)
         PlayerData[playerid][pDiscordTimer] = 0;
     }
 
-    BilgiMesajiGonder(playerid,
+    SendClientMessage(playerid, -1,
         "Discord doğrulaması tamamlandı. Sunucuya tekrar bağlanın.");
 
     printf("[Discord] %s doğrulama tamamlandı, kickleniyor",
-        ReturnNameEx(playerid));
+        ReturnName(playerid));
 
     SetTimerEx("KickTimer", 1000, false, "i", playerid);
     return 1;
